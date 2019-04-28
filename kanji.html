@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <title>{{.Kanji}} - ファイト！</title>
+    <style>
+
+    body{
+        background-color: black;
+        color:red;
+    }
+    button{
+        transition: ease-in-out .3s;
+        border: 0px;
+        background-color: grey;
+        color: black;
+        padding:.5em;
+    }
+    button:hover{
+        background-color: red;
+        color: black;
+    }
+    .hide{
+        display:none;
+    }
+    .show{
+        display:block;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="row">
+    <div class="cl-sm" style="font-size:30em;color: red;background-color: black;">
+        {{.Kanji}}
+    </div>
+    <div class="col-sm">
+    <button onclick="toggle()">Definition Show/Hide</button>
+    <input type="number" name="page" id="page" placeholder="go to kanji number">
+    <button onclick="page()">Go to kanji</button>
+    <button onclick="previous()">Previous</button>
+    <button onclick="next()">Next</button>
+    <div class="hide" id="definition" style="scroll-behavior: smooth;overflow: auto;max-height: 30em;">
+        <div>
+                {{range .Definition.Data}}
+                    {{range .Japanese}}
+                [<b>Reading: {{.Reading}}</b>&nbsp;<b>Word: {{.Word}}</b>]&nbsp;&nbsp;&nbsp;
+                    {{end}}
+                {{end}}
+        </div>
+        <div>
+                {{range .Definition.Data}}
+                    {{range .Senses}}
+                        {{range $k,$v := .EnDef}}
+                            {{$v}},&nbsp;&nbsp;&nbsp;
+                        {{end}}
+                    {{end}}
+                {{end}}
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>  
+
+    <script type="application/javascript">
+function next() {
+    console.log(location.pathname);
+    let path = location.pathname.split("/");
+    let page = parseInt(path[2],10)+1; 
+    location.replace("/kanji/"+page);
+}   
+function previous() {
+    console.log(location.pathname);
+    let path = location.pathname.split("/");
+    let page = parseInt(path[2],10)-1; 
+    location.replace("/kanji/"+page);
+} 
+function page() {
+    let page = document.getElementById("page");
+    location.replace("/kanji/"+page.value);
+    }
+function toggle() {
+    if(document.querySelector("#definition").classList.contains("hide")){
+        document.querySelector("#definition").className = "show";
+    }else{document.querySelector("#definition").className = "hide";}
+    }
+    </script>
+</body>
+</html>
